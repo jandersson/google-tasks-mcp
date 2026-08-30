@@ -45,8 +45,9 @@ order, checking current state first — some may already be done:
    load in a fresh session) and verify the registration with claude mcp list.
 6. Remind me that the first google-tasks tool call opens a browser for
    Google authorization (the "unverified app" warning is expected), and
-   that I should publish the OAuth app (Audience page → Publish app) —
-   otherwise the token expires after 7 days in Testing status.
+   that I should publish the OAuth app per the README's "Optional: publish
+   the OAuth app" section — otherwise the token expires after 7 days in
+   Testing status.
 ```
 
 ### Option B: manual setup
@@ -116,19 +117,34 @@ The first tool call opens a browser for Google authorization. Approve it (the
 "unverified app" warning is expected for a personal test-user client) and the
 token is cached; later calls run without a browser.
 
+## Optional: publish the OAuth app
+
+Recommended. While the OAuth app's publishing status is "Testing", Google
+expires refresh tokens after **7 days**, so you're re-authorizing in a
+browser every week. Publishing to production makes the token permanent. No
+verification review is needed for personal use — the consent screen just
+keeps its "unverified" warning.
+
+1. **Branding** page: fill in an **Application home page** and an
+   **Application privacy policy link**, and add their domain under
+   **Authorized domains**. GitHub Pages on your fork works — enable Pages
+   on the repo and the bundled [privacy.md](privacy.md) serves as the policy
+   ([example](https://jandersson.github.io/google-tasks-mcp/privacy.html)).
+   The Publish button stays greyed out until these are saved.
+2. **Data Access** page: **Add or remove scopes** → manually add
+   `https://www.googleapis.com/auth/tasks` → Update → Save.
+3. **Audience** page: **Publish app**.
+4. Delete `token.json` and authorize once more — that token won't expire.
+
+Two traps: don't upload a **logo** (that's what makes the verification
+review mandatory), and Workspace users shouldn't click **Make internal**
+if the Google account they authorize with is outside their organization —
+it would be locked out.
+
 ## Troubleshooting
 
-- **Auth stops working after ~a week**: while the OAuth app's publishing
-  status is "Testing", Google expires refresh tokens after 7 days. Fix it
-  permanently on the **Audience** page → **Publish app**. Publishing requires
-  a homepage URL and a privacy policy URL on the Branding page (with their
-  domain under Authorized domains) — GitHub Pages on your fork works
-  ([example policy](https://jandersson.github.io/google-tasks-mcp/privacy.html)).
-  Also declare the `https://www.googleapis.com/auth/tasks` scope under
-  **Data Access**. No verification review is needed for personal use — the
-  consent screen just keeps its "unverified" warning (don't upload a logo;
-  that's what makes verification mandatory). Then delete `token.json` and
-  authorize once more.
+- **Auth stops working after ~a week**: Testing-status refresh tokens
+  expire after 7 days — see "Optional: publish the OAuth app" above.
 - **Tools don't appear after registering**: MCP servers load at session
   start, and resuming an existing conversation keeps its old tool set —
   start a *new* session.
