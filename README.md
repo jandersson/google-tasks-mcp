@@ -127,6 +127,14 @@ The first tool call opens a browser for Google authorization. Approve it (the
 "unverified app" warning is expected for a personal test-user client) and the
 token is cached; later calls run without a browser.
 
+## Tests
+
+Unit tests mock the Google API — no credentials or network needed:
+
+```
+uv run --script tests/test_server.py
+```
+
 ## Optional: publish the OAuth app
 
 Recommended. While the OAuth app's publishing status is "Testing", Google
