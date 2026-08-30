@@ -17,7 +17,41 @@ A single-file Python MCP server for Google Tasks. Runs via `uv run --script`
 
 ## Setup
 
-### 1. OAuth client
+### Option A: install via prompt
+
+Paste this into Claude Code (or another capable coding agent) and it will
+work through the setup with you, including the Google Cloud Console parts:
+
+```
+Set up the Google Tasks MCP server from
+https://github.com/jandersson/google-tasks-mcp. Work through these steps in
+order, checking current state first — some may already be done:
+
+1. Clone the repo to a sensible location if I don't have it already.
+2. Verify uv is installed (uv --version); if missing, install it
+   (winget install astral-sh.uv on Windows, brew install uv on macOS).
+3. Check that credentials.json exists at
+   ~/.config/google-tasks-mcp/credentials.json
+   (Windows: %USERPROFILE%\.config\google-tasks-mcp\credentials.json).
+   If not, walk me through creating it step by step:
+   console.cloud.google.com → enable "Google Tasks API" → configure the
+   OAuth consent screen (audience External; the app name must not contain
+   "Google"; add my own account as a test user on the Audience page) →
+   Clients → Create client → type "Desktop app" → I download the JSON and
+   you save it to that exact path.
+4. Register the server:
+   claude mcp add --scope user google-tasks -- uv run --script "<absolute path to server.py in my clone>"
+5. Tell me to start a new Claude Code session (newly added MCP servers only
+   load in a fresh session) and verify the registration with claude mcp list.
+6. Remind me that the first google-tasks tool call opens a browser for
+   Google authorization (the "unverified app" warning is expected), and
+   that I should publish the OAuth app (Audience page → Publish app) —
+   otherwise the token expires after 7 days in Testing status.
+```
+
+### Option B: manual setup
+
+#### 1. OAuth client
 
 1. Go to [console.cloud.google.com](https://console.cloud.google.com), pick or
    create a project.
@@ -39,7 +73,7 @@ A single-file Python MCP server for Google Tasks. Runs via `uv run --script`
 `token.json` is written next to it after the first authorization. Neither file
 belongs in git.
 
-### 2. uv
+#### 2. uv
 
 Requires [uv](https://docs.astral.sh/uv/). On Windows:
 
@@ -56,7 +90,7 @@ brew install uv
 (or the [standalone installer](https://docs.astral.sh/uv/getting-started/installation/):
 `curl -LsSf https://astral.sh/uv/install.sh | sh`, which also covers Linux)
 
-### 3. Register with Claude Code
+#### 3. Register with Claude Code
 
 Clone the repo anywhere you like:
 
