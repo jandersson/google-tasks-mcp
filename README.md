@@ -52,6 +52,9 @@ order, checking current state first — some may already be done:
    that I should publish the OAuth app per the README's "Optional: publish
    the OAuth app" section — otherwise the token expires after 7 days in
    Testing status.
+7. Finally, tell me to verify the install by asking the new session to
+   call list_tasklists — it should trigger the browser authorization and
+   then return my task lists.
 ```
 
 ### Option B: manual setup
