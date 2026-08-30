@@ -22,11 +22,14 @@ A single-file Python MCP server for Google Tasks. Runs via `uv run --script`
 1. Go to [console.cloud.google.com](https://console.cloud.google.com), pick or
    create a project.
 2. **APIs & Services → Library** → enable **Google Tasks API**.
-3. **APIs & Services → Credentials → Create Credentials → OAuth client ID**,
-   application type **Desktop app**.
-   - If prompted to configure a consent screen first: User type **External**,
-     fill the required fields, and add your own Google account as a test user.
-4. Download the client JSON and save it as:
+3. Configure the consent screen (**Google Auth Platform**, or **OAuth consent
+   screen** in the sidebar): audience **External**, fill the required fields.
+   The app name must not contain "Google" — Google rejects it.
+4. On the **Audience** page, add your own Google account under **Test users**
+   (it may already be there).
+5. **Clients → Create client**, application type **Desktop app**.
+6. Open the created client and **Download JSON** (in the Client secrets
+   section), then save it as:
 
    ```
    %USERPROFILE%\.config\google-tasks-mcp\credentials.json   (Windows)
