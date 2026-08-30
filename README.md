@@ -24,6 +24,14 @@ Google Calendar, but not for Google Tasks. This fills the gap.
 | `complete_task` | Mark a task completed |
 | `delete_task` | Delete a task permanently |
 
+> **Why `create_recurring_tasks` exists**: the Google Tasks *app* supports
+> repeating tasks, but the public API doesn't — the Task resource in the
+> [v1 discovery document](https://tasks.googleapis.com/$discovery/rest?version=v1)
+> has no recurrence field at all (a years-old feature request). Repeat rules
+> can only be set in the UI, where completing an instance spawns the next.
+> Prefer that for open-ended chores; use `create_recurring_tasks` for finite
+> series, since it creates all N dated tasks up front.
+
 ## Setup
 
 ### Option A: install via prompt
