@@ -7,6 +7,9 @@
 A single-file Python MCP server for Google Tasks. Runs via `uv run --script`
 (PEP 723 inline dependencies — no venv or install step).
 
+Born out of mild annoyance: Claude ships built-in connectors for Gmail and
+Google Calendar, but not for Google Tasks. This fills the gap.
+
 ## Tools
 
 | Tool | Purpose |
