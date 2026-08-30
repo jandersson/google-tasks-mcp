@@ -23,6 +23,8 @@ Google Calendar, but not for Google Tasks. This fills the gap.
 | `update_task` | Change a task's title, notes, or due date |
 | `complete_task` | Mark a task completed |
 | `delete_task` | Delete a task permanently |
+| `search_tasks` | Find tasks by title/notes substring, in one list or all (the API has no server-side search, so this lists and filters) |
+| `clear_completed` | Permanently remove all completed tasks from a list |
 
 > **Why `create_recurring_tasks` exists**: the Google Tasks *app* supports
 > repeating tasks, but the public API doesn't — the Task resource in the

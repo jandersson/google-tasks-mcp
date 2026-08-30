@@ -39,7 +39,9 @@ class FakeTasks:
         self.inserted = []
         self.patched = []
         self.deleted = []
+        self.cleared = []
         self.list_result = {"items": []}
+        self.list_results = {}  # per-tasklist overrides
 
     def insert(self, tasklist, body):
         self.inserted.append((tasklist, body))
@@ -55,7 +57,12 @@ class FakeTasks:
 
     def list(self, **kwargs):
         self.list_kwargs = kwargs
-        return FakeRequest(self.list_result)
+        override = self.list_results.get(kwargs.get("tasklist"))
+        return FakeRequest(override if override is not None else self.list_result)
+
+    def clear(self, tasklist):
+        self.cleared.append(tasklist)
+        return FakeRequest(None)
 
 
 class FakeTasklists:
@@ -88,12 +95,14 @@ def service(monkeypatch):
 def test_all_tools_registered():
     tools = asyncio.run(server.mcp.list_tools())
     assert sorted(t.name for t in tools) == [
+        "clear_completed",
         "complete_task",
         "create_recurring_tasks",
         "create_task",
         "delete_task",
         "list_tasklists",
         "list_tasks",
+        "search_tasks",
         "update_task",
     ]
 
@@ -210,6 +219,40 @@ def test_list_tasks_flags(service):
     assert result == [{"id": "a", "title": "t"}]
     assert service._tasks.list_kwargs["showCompleted"] is True
     assert service._tasks.list_kwargs["showHidden"] is True
+
+
+def test_search_tasks_across_lists(service):
+    service._tasklists.list_result = {
+        "items": [{"id": "l1", "title": "My Tasks"}, {"id": "l2", "title": "Work"}]
+    }
+    service._tasks.list_results = {
+        "l1": {"items": [
+            {"id": "a", "title": "Water plants", "status": "needsAction"},
+            {"id": "b", "title": "Other", "notes": "buy WATERing can",
+             "status": "needsAction"},
+        ]},
+        "l2": {"items": [{"id": "c", "title": "Deploy", "status": "needsAction"}]},
+    }
+    result = json.loads(server.search_tasks("water"))
+    assert [(m["tasklist"], m["id"]) for m in result] == [
+        ("My Tasks", "a"), ("My Tasks", "b")
+    ]
+
+
+def test_search_tasks_single_list(service):
+    service._tasks.list_results = {
+        "l2": {"items": [{"id": "c", "title": "Water cooler talk",
+                          "status": "needsAction"}]}
+    }
+    result = json.loads(server.search_tasks("water", tasklist_id="l2"))
+    assert [m["id"] for m in result] == ["c"]
+    assert result[0]["tasklist_id"] == "l2"
+
+
+def test_clear_completed(service):
+    out = json.loads(server.clear_completed("listA"))
+    assert service._tasks.cleared == ["listA"]
+    assert out == {"cleared": "listA"}
 
 
 if __name__ == "__main__":

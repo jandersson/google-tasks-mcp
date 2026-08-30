@@ -109,6 +109,48 @@ def list_tasks(tasklist_id: str = "@default", show_completed: bool = False) -> s
 
 
 @mcp.tool()
+def search_tasks(
+    query: str, tasklist_id: str = "", show_completed: bool = False
+) -> str:
+    """Search tasks by substring match on title or notes (case-insensitive).
+
+    The Tasks API has no server-side search, so this lists and filters.
+
+    Args:
+        query: Text to look for.
+        tasklist_id: Limit the search to one list; empty searches every list.
+        show_completed: Include completed (and hidden) tasks.
+    """
+    service = _get_service()
+    if tasklist_id:
+        lists = [{"id": tasklist_id, "title": tasklist_id}]
+    else:
+        lists = (
+            service.tasklists().list(maxResults=100).execute().get("items", [])
+        )
+    q = query.lower()
+    matches = []
+    for tl in lists:
+        result = (
+            service.tasks()
+            .list(
+                tasklist=tl["id"],
+                maxResults=100,
+                showCompleted=show_completed,
+                showHidden=show_completed,
+            )
+            .execute()
+        )
+        for t in result.get("items", []):
+            if q in t.get("title", "").lower() or q in t.get("notes", "").lower():
+                matches.append(
+                    {"tasklist": tl["title"], "tasklist_id": tl["id"]}
+                    | _slim_task(t)
+                )
+    return json.dumps(matches, indent=2, ensure_ascii=False)
+
+
+@mcp.tool()
 def create_task(
     title: str,
     notes: str = "",
@@ -237,6 +279,17 @@ def delete_task(task_id: str, tasklist_id: str = "@default") -> str:
     """
     _get_service().tasks().delete(tasklist=tasklist_id, task=task_id).execute()
     return json.dumps({"deleted": task_id})
+
+
+@mcp.tool()
+def clear_completed(tasklist_id: str = "@default") -> str:
+    """Permanently remove all completed tasks from a task list.
+
+    Args:
+        tasklist_id: Task list id, or "@default".
+    """
+    _get_service().tasks().clear(tasklist=tasklist_id).execute()
+    return json.dumps({"cleared": tasklist_id})
 
 
 if __name__ == "__main__":
