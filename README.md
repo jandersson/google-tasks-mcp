@@ -55,19 +55,20 @@ brew install uv
 
 ### 3. Register with Claude Code
 
-Windows:
+Clone the repo anywhere you like:
 
 ```
-claude mcp add google-tasks -- uv run --script "%USERPROFILE%\dev\google-tasks-mcp\server.py"
+git clone https://github.com/jandersson/google-tasks-mcp.git
 ```
 
-macOS / Linux:
+Then register the server, substituting the absolute path to your clone:
 
 ```
-claude mcp add google-tasks -- uv run --script "$HOME/dev/google-tasks-mcp/server.py"
+claude mcp add google-tasks -- uv run --script "/path/to/google-tasks-mcp/server.py"
 ```
 
-(adjust the path to wherever you cloned the repo)
+(e.g. `C:\Users\you\google-tasks-mcp\server.py` on Windows,
+`/Users/you/google-tasks-mcp/server.py` on macOS)
 
 Restart Claude Code afterwards — newly added MCP servers only load in a new
 session.
