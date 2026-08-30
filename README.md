@@ -29,7 +29,8 @@ A single-file Python MCP server for Google Tasks. Runs via `uv run --script`
 4. Download the client JSON and save it as:
 
    ```
-   %USERPROFILE%\.config\google-tasks-mcp\credentials.json
+   %USERPROFILE%\.config\google-tasks-mcp\credentials.json   (Windows)
+   ~/.config/google-tasks-mcp/credentials.json               (macOS / Linux)
    ```
 
 `token.json` is written next to it after the first authorization. Neither file
@@ -43,11 +44,30 @@ Requires [uv](https://docs.astral.sh/uv/). On Windows:
 winget install astral-sh.uv
 ```
 
+On macOS:
+
+```
+brew install uv
+```
+
+(or the [standalone installer](https://docs.astral.sh/uv/getting-started/installation/):
+`curl -LsSf https://astral.sh/uv/install.sh | sh`, which also covers Linux)
+
 ### 3. Register with Claude Code
+
+Windows:
 
 ```
 claude mcp add google-tasks -- uv run --script "%USERPROFILE%\dev\google-tasks-mcp\server.py"
 ```
+
+macOS / Linux:
+
+```
+claude mcp add google-tasks -- uv run --script "$HOME/dev/google-tasks-mcp/server.py"
+```
+
+(adjust the path to wherever you cloned the repo)
 
 Restart Claude Code afterwards — newly added MCP servers only load in a new
 session.
