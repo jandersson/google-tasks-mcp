@@ -81,3 +81,18 @@ session.
 The first tool call opens a browser for Google authorization. Approve it (the
 "unverified app" warning is expected for a personal test-user client) and the
 token is cached; later calls run without a browser.
+
+## Troubleshooting
+
+- **Auth stops working after ~a week**: while the OAuth app's publishing
+  status is "Testing", Google expires refresh tokens after 7 days. Fix it
+  permanently on the **Audience** page → **Publish app** (no verification
+  needed for personal use — the consent screen just keeps its "unverified"
+  warning). Then delete `token.json` and authorize once more.
+- **Tools don't appear after registering**: MCP servers load at session
+  start, and resuming an existing conversation keeps its old tool set —
+  start a *new* session.
+- **Re-authorizing**: delete `token.json` from the config directory and the
+  next tool call opens the browser again.
+- **`create_recurring_tasks` is not idempotent** — running it twice creates
+  two full series of tasks.
