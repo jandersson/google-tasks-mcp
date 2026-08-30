@@ -4,6 +4,8 @@
 
 # google-tasks-mcp
 
+[![test](https://github.com/jandersson/google-tasks-mcp/actions/workflows/test.yml/badge.svg)](https://github.com/jandersson/google-tasks-mcp/actions/workflows/test.yml)
+
 A single-file Python MCP server for Google Tasks. Runs via `uv run --script`
 (PEP 723 inline dependencies — no venv or install step).
 
