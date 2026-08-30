@@ -120,9 +120,15 @@ token is cached; later calls run without a browser.
 
 - **Auth stops working after ~a week**: while the OAuth app's publishing
   status is "Testing", Google expires refresh tokens after 7 days. Fix it
-  permanently on the **Audience** page → **Publish app** (no verification
-  needed for personal use — the consent screen just keeps its "unverified"
-  warning). Then delete `token.json` and authorize once more.
+  permanently on the **Audience** page → **Publish app**. Publishing requires
+  a homepage URL and a privacy policy URL on the Branding page (with their
+  domain under Authorized domains) — GitHub Pages on your fork works
+  ([example policy](https://jandersson.github.io/google-tasks-mcp/privacy.html)).
+  Also declare the `https://www.googleapis.com/auth/tasks` scope under
+  **Data Access**. No verification review is needed for personal use — the
+  consent screen just keeps its "unverified" warning (don't upload a logo;
+  that's what makes verification mandatory). Then delete `token.json` and
+  authorize once more.
 - **Tools don't appear after registering**: MCP servers load at session
   start, and resuming an existing conversation keeps its old tool set —
   start a *new* session.
