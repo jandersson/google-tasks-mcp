@@ -1,7 +1,7 @@
 # /// script
 # requires-python = ">=3.10"
 # dependencies = [
-#     "mcp>=1.2.0",
+#     "mcp>=1.2.0,<2",
 #     "google-api-python-client>=2.100.0",
 #     "google-auth-oauthlib>=1.2.0",
 # ]
