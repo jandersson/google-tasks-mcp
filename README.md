@@ -1,5 +1,7 @@
 # google-tasks-mcp
 
+<img src="logo.png" alt="Tasks MCP logo" width="120" align="right">
+
 A single-file Python MCP server for Google Tasks. Runs via `uv run --script`
 (PEP 723 inline dependencies — no venv or install step).
 
