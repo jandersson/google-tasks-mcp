@@ -31,8 +31,11 @@ Google Calendar, but not for Google Tasks. This fills the gap.
 > [v1 discovery document](https://tasks.googleapis.com/$discovery/rest?version=v1)
 > has no recurrence field at all (a years-old feature request). Repeat rules
 > can only be set in the UI, where completing an instance spawns the next.
-> Prefer that for open-ended chores; use `create_recurring_tasks` for finite
-> series, since it creates all N dated tasks up front.
+>
+> For a repeating task, the recommended two-step: have the server create the
+> origination task (title, notes, first due date), then open it in the Tasks
+> app and set **Repeat** yourself. Use `create_recurring_tasks` only when you
+> want all N dated tasks to exist up front (finite series, visible at once).
 
 ## Setup
 
